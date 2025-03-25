@@ -1,0 +1,20 @@
+framework:
+    workflows:
+        commande_workflow:
+            type: 'state_machine'
+            supports:
+                - App\Entity\Commande
+            places:
+                - en_attente
+                - en_cours
+                - livree
+            transitions:
+                start:
+                    from: en_attente
+                    to: en_cours
+                deliver:
+                    from: en_cours
+                    to: livree
+                reset:
+                    from: livree
+                    to: en_attente
