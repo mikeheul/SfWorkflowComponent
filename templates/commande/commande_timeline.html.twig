@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande - Suivi du Processus{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Suivi de la commande #{{ commande.id }}</h1>
+
+        <div class="timeline">
+            <ul class="list-group">
+                <li class="list-group-item {% if commande.status == 'en_attente' %}bg-warning{% endif %}">
+                    <strong>Étape 1 : En attente</strong>
+                    {% if commande.status == 'en_attente' %}
+                        <p>Commande créée, en attente du paiement.</p>
+                        <a href="{{ path('commande_start', {'id': commande.id}) }}" class="btn btn-primary">Payer la commande</a>
+                    {% else %}
+                        <p>Commande en attente, vous ne pouvez plus revenir en arrière.</p>
+                    {% endif %}
+                </li>
+
+                <li class="list-group-item {% if commande.status == 'payee' %}bg-success{% endif %}">
+                    <strong>Étape 2 : Payée</strong>
+                    {% if commande.status == 'payee' %}
+                        <p>Commande payée, prête pour traitement.</p>
+                        <a href="{{ path('commande_process', {'id': commande.id}) }}" class="btn btn-primary">Traiter la commande</a>
+                    {% else %}
+                        <p>Commande déjà traitée ou en cours de traitement.</p>
+                    {% endif %}
+                </li>
+
+                <li class="list-group-item {% if commande.status == 'en_cours' %}bg-info{% endif %}">
+                    <strong>Étape 3 : En cours</strong>
+                    {% if commande.status == 'en_cours' %}
+                        <p>Commande en cours de préparation.</p>
+                        <a href="{{ path('commande_deliver', {'id': commande.id}) }}" class="btn btn-primary">Livrer la commande</a>
+                    {% else %}
+                        <p>Commande non traitée ou livrée.</p>
+                    {% endif %}
+                </li>
+
+                <li class="list-group-item {% if commande.status == 'livree' %}bg-success{% endif %}">
+                    <strong>Étape 4 : Livrée</strong>
+                    {% if commande.status == 'livree' %}
+                        <p>Commande livrée avec succès.</p>
+                    {% else %}
+                        <p>Commande pas encore livrée.</p>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+
+        <div class="mt-4">
+            <h2>Historique des actions</h2>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Action 1 : </strong>Commande ajoutée. Statut : {{ commande.status }}
+                </li>
+                {# Tu peux ajouter ici d'autres actions ou événements de suivi de la commande #}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

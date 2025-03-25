@@ -1,6 +1,5 @@
 <?php
 
-// src/Controller/CommandeController.php
 namespace App\Controller;
 
 use App\Entity\Commande;
@@ -14,12 +13,12 @@ class CommandeController extends AbstractController
 {
     private $workflowRegistry;
 
-    // Le constructeur pour injecter le service Registry
     public function __construct(Registry $workflowRegistry)
     {
         $this->workflowRegistry = $workflowRegistry;
     }
 
+    // Route pour ajouter une commande
     #[Route('/commande/add', name: 'commande_add')]
     public function addCommande(EntityManagerInterface $em): Response
     {
@@ -27,25 +26,38 @@ class CommandeController extends AbstractController
         $em->persist($commande);
         $em->flush();
 
-        return new Response('Commande ajoutée. Statut : ' . $commande->getStatus());
+        // Rediriger vers la timeline de la commande après création
+        return $this->redirectToRoute('commande_timeline', ['id' => $commande->getId()]);
     }
 
     // Route pour démarrer une commande
     #[Route('/commande/start/{id}', name: 'commande_start')]
     public function startCommande(Commande $commande, EntityManagerInterface $em): Response
     {
-        // Récupérer le workflow pour cette commande
         $workflow = $this->workflowRegistry->get($commande);
 
-        // Vérifier si la transition 'start' est possible
         if ($workflow->can($commande, 'start')) {
-            // Appliquer la transition 'start' pour faire passer la commande à l'état 'en_cours'
             $workflow->apply($commande, 'start');
-            // Sauvegarder l'entité mise à jour
             $em->flush();
         }
 
-        return new Response('Commande démarrée. Nouveau statut : ' . $commande->getStatus());
+        // Rediriger vers la timeline après application de la transition
+        return $this->redirectToRoute('commande_timeline', ['id' => $commande->getId()]);
+    }
+
+    // Route pour traiter une commande
+    #[Route('/commande/process/{id}', name: 'commande_process')]
+    public function processCommande(Commande $commande, EntityManagerInterface $em): Response
+    {
+        $workflow = $this->workflowRegistry->get($commande);
+
+        if ($workflow->can($commande, 'process')) {
+            $workflow->apply($commande, 'process');
+            $em->flush();
+        }
+
+        // Rediriger vers la timeline après application de la transition
+        return $this->redirectToRoute('commande_timeline', ['id' => $commande->getId()]);
     }
 
     // Route pour livrer une commande
@@ -55,12 +67,12 @@ class CommandeController extends AbstractController
         $workflow = $this->workflowRegistry->get($commande);
 
         if ($workflow->can($commande, 'deliver')) {
-            // Appliquer la transition 'deliver' pour faire passer la commande à l'état 'livree'
             $workflow->apply($commande, 'deliver');
             $em->flush();
         }
 
-        return new Response('Commande livrée. Nouveau statut : ' . $commande->getStatus());
+        // Rediriger vers la timeline après application de la transition
+        return $this->redirectToRoute('commande_timeline', ['id' => $commande->getId()]);
     }
 
     // Route pour réinitialiser une commande
@@ -70,11 +82,20 @@ class CommandeController extends AbstractController
         $workflow = $this->workflowRegistry->get($commande);
 
         if ($workflow->can($commande, 'reset')) {
-            // Appliquer la transition 'reset' pour remettre la commande à l'état 'en_attente'
             $workflow->apply($commande, 'reset');
             $em->flush();
         }
 
-        return new Response('Commande réinitialisée. Nouveau statut : ' . $commande->getStatus());
+        // Rediriger vers la timeline après application de la transition
+        return $this->redirectToRoute('commande_timeline', ['id' => $commande->getId()]);
+    }
+
+    // Afficher la timeline de la commande
+    #[Route('/commande/timeline/{id}', name: 'commande_timeline')]
+    public function showTimeline(Commande $commande): Response
+    {
+        return $this->render('commande/commande_timeline.html.twig', [
+            'commande' => $commande,
+        ]);
     }
 }

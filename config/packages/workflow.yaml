@@ -6,11 +6,15 @@ framework:
                 - App\Entity\Commande
             places:
                 - en_attente
+                - payee
                 - en_cours
                 - livree
             transitions:
                 start:
                     from: en_attente
+                    to: payee
+                process:
+                    from: payee
                     to: en_cours
                 deliver:
                     from: en_cours
