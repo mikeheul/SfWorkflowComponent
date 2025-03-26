@@ -26,7 +26,7 @@ class CandidatController extends AbstractController
     {
         $statusFilter = $request->query->get('status');
         
-        if ($statusFilter) {
+        if ($statusFilter && $statusFilter != 'all') {
             $candidats = $cr->findBy(['status' => $statusFilter]);
         } else {
             $candidats = $cr->findBy([], ['dateCandidature' => 'DESC']);

@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <select name="status" class="form-select">
-                        <option value="" {% if app.request.get('status') == '' %}selected{% endif %}>Toutes les candidatures</option>
+                        <option value="all" {% if app.request.get('status') == 'all' %}selected{% endif %}>Toutes les candidatures</option>
                         <option value="accepte" {% if app.request.get('status') == 'accepte' %}selected{% endif %}>Candidatures acceptées</option>
                         <option value="refuse" {% if app.request.get('status') == 'refuse' %}selected{% endif %}>Candidatures refusées</option>
                     </select>
