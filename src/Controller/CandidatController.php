@@ -10,6 +10,7 @@ use Symfony\Component\Workflow\Registry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CandidatController extends AbstractController
@@ -75,6 +76,38 @@ class CandidatController extends AbstractController
         $em->flush();
 
         return new Response("{$count} candidats ajoutés !");
+    }
+
+    #[Route('/calendar/events', name: 'calendar_events', methods: ['GET'])]
+    public function getCalendarEvents(CandidatRepository $candidatRepository): JsonResponse
+    {
+        $candidats = $candidatRepository->findAll();
+        $events = [];
+
+        foreach ($candidats as $candidat) {
+            if ($candidat->getDateEntretien()) {
+                $events[] = [
+                    'title' => "Entretien - " . $candidat->getPrenom() . " " . $candidat->getNom(),
+                    'start' => $candidat->getDateEntretien()->format('Y-m-d H:i:s'),
+                    'color' => '#007bff'
+                ];
+            }
+            if ($candidat->getDateTest()) {
+                $events[] = [
+                    'title' => "Test - " . $candidat->getPrenom() . " " . $candidat->getNom(),
+                    'start' => $candidat->getDateTest()->format('Y-m-d H:i:s'),
+                    'color' => '#28a745'
+                ];
+            }
+        }
+
+        return new JsonResponse($events);
+    }
+
+    #[Route('/calendar', name: 'calendar')]
+    public function calendar(): Response
+    {
+        return $this->render('candidature/calendar.html.twig', []);
     }
 
     #[Route('/candidature/{id}/update-entretien', name: 'candidature_update_entretien', methods: ['POST'])]
