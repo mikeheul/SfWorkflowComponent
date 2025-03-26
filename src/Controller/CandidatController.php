@@ -77,6 +77,62 @@ class CandidatController extends AbstractController
         return new Response("{$count} candidats ajoutés !");
     }
 
+    #[Route('/candidature/{id}/update-entretien', name: 'candidature_update_entretien', methods: ['POST'])]
+    public function updateEntretien(Request $request, Candidat $candidat, EntityManagerInterface $entityManager): Response
+    {
+        $dateEntretien = $request->request->get('dateEntretien');
+        
+        if ($dateEntretien) {
+            $candidat->setDateEntretien(new \DateTime($dateEntretien));
+            $entityManager->flush();
+            $this->addFlash('success', 'Date d\'entretien mise à jour.');
+        }
+
+        return $this->redirectToRoute('candidature_timeline', ['id' => $candidat->getId()]);
+    }
+
+    #[Route('/candidature/{id}/update-test', name: 'candidature_update_test', methods: ['POST'])]
+    public function updateTest(Request $request, Candidat $candidat, EntityManagerInterface $entityManager): Response
+    {
+        $dateTest = $request->request->get('dateTest');
+
+        if ($dateTest) {
+            $candidat->setDateTest(new \DateTime($dateTest));
+            $entityManager->flush();
+            $this->addFlash('success', 'Date du test technique mise à jour.');
+        }
+
+        return $this->redirectToRoute('candidature_timeline', ['id' => $candidat->getId()]);
+    }
+
+    #[Route('/candidature/{id}/update-validation-rh', name: 'candidature_update_validation_rh', methods: ['POST'])]
+    public function updateValidationRH(Request $request, Candidat $candidat, EntityManagerInterface $entityManager): Response
+    {
+        $remarqueRH = $request->request->get('remarqueRH');
+
+        if ($remarqueRH) {
+            $candidat->setRemarqueRH($remarqueRH);
+            $entityManager->flush();
+            $this->addFlash('success', 'Remarque RH enregistrée.');
+        }
+
+        return $this->redirectToRoute('candidature_timeline', ['id' => $candidat->getId()]);
+    }
+
+    #[Route('/candidature/{id}/update-offre', name: 'candidature_update_offre', methods: ['POST'])]
+    public function updateOffre(Request $request, Candidat $candidat, EntityManagerInterface $entityManager): Response
+    {
+        $salairePropose = $request->request->get('salairePropose');
+
+        if ($salairePropose) {
+            $candidat->setSalairePropose((float) $salairePropose);
+            $entityManager->flush();
+            $this->addFlash('success', 'Offre mise à jour.');
+        }
+
+        return $this->redirectToRoute('candidature_timeline', ['id' => $candidat->getId()]);
+    }
+
     #[Route('/candidature/{id}', name: 'candidature_timeline')]
     public function showTimeline(Candidat $candidat): Response
     {
