@@ -63,8 +63,12 @@ class CandidatController extends AbstractController
             $candidat = new Candidat();
             $candidat->setNom($faker->lastName);
             $candidat->setPrenom($faker->firstName);
-            $candidat->setEmail($faker->unique()->safeEmail);
-
+            // $candidat->setEmail($faker->unique()->safeEmail);
+            $candidat->setEmail(mb_strtolower(
+                transliterator_transliterate('Any-Latin; Latin-ASCII', str_replace(" ","",$candidat->getPrenom())) . "." .
+                transliterator_transliterate('Any-Latin; Latin-ASCII', str_replace(" ","",$candidat->getNom())) . "@exemple.com"
+            ));
+            
             $em->persist($candidat);
         }
 
