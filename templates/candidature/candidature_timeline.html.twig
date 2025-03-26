@@ -3,31 +3,53 @@
 {% block title %}Suivi de la Candidature{% endblock %}
 
 {% block body %}
-    <h1>Suivi de la candidature #{{ candidat.id }}</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4">Suivi de la candidature #{{ candidat.id }}</h1>
 
-    <h3>Statut actuel : {{ candidat.status }}</h3>
+        <h3 class="d-flex align-items-center">
+            Statut actuel :
+            <span class="badge 
+                {% if candidat.status == 'candidature_envoyee' %}badge-primary{% elseif candidat.status == 'entretien_planifie' %}badge-warning{% elseif candidat.status == 'entretien_realise' %}badge-info{% elseif candidat.status == 'offre_envoyee' %}badge-success{% elseif candidat.status == 'accepte' %}badge-success{% else %}badge-danger{% endif %}
+                rounded-pill px-3 py-2 ms-2"
+                style="background-color: {% if candidat.status == 'candidature_envoyee' %}#007bff{% elseif candidat.status == 'entretien_planifie' %}#ffc107{% elseif candidat.status == 'entretien_realise' %}#17a2b8{% elseif candidat.status == 'offre_envoyee' %}#28a745{% elseif candidat.status == 'accepte' %}#28a745{% else %}#dc3545{% endif %}; color: white;">
+                {{ candidat.status | capitalize }}
+            </span>
+        </h3>
 
-    <!-- Timeline des étapes -->
-    <div class="timeline">
-        <ul>
-            <li {% if candidat.status == 'candidature_envoyee' %}class="active"{% endif %}>Candidature envoyée</li>
-            <li {% if candidat.status == 'entretien_planifie' %}class="active"{% endif %}>Entretien planifié</li>
-            <li {% if candidat.status == 'entretien_realise' %}class="active"{% endif %}>Entretien réalisé</li>
-            <li {% if candidat.status == 'offre_envoyee' %}class="active"{% endif %}>Offre envoyée</li>
-            <li {% if candidat.status == 'accepte' %}class="active"{% endif %}>Accepté</li>
-            <li {% if candidat.status == 'refuse' %}class="active"{% endif %}>Refusé</li>
-        </ul>
+        <!-- Timeline des étapes -->
+        <div class="timeline mt-4">
+            <ul class="list-group">
+                <li class="list-group-item {% if candidat.status == 'candidature_envoyee' %}list-group-item-primary{% endif %}">
+                    Candidature envoyée
+                </li>
+                <li class="list-group-item {% if candidat.status == 'entretien_planifie' %}list-group-item-warning{% endif %}">
+                    Entretien planifié
+                </li>
+                <li class="list-group-item {% if candidat.status == 'entretien_realise' %}list-group-item-info{% endif %}">
+                    Entretien réalisé
+                </li>
+                <li class="list-group-item {% if candidat.status == 'offre_envoyee' %}list-group-item-success{% endif %}">
+                    Offre envoyée
+                </li>
+                <li class="list-group-item {% if candidat.status == 'accepte' %}list-group-item-success{% endif %}">
+                    Accepté
+                </li>
+                <li class="list-group-item {% if candidat.status == 'refuse' %}list-group-item-danger{% endif %}">
+                    Refusé
+                </li>
+            </ul>
+        </div>
+
+        <!-- Actions possibles -->
+        <div class="mt-4">
+            <h3>Actions possibles :</h3>
+            <div class="list-group">
+                {% for transition in workflow.getEnabledTransitions(candidat) %}
+                    <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}" class="list-group-item list-group-item-action btn btn-outline-primary mb-2">
+                        {{ transition.getName() | capitalize }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-    <!-- Boutons pour passer à l'étape suivante -->
-    <h3>Actions possibles :</h3>
-    <ul>
-        {% for transition in workflow.getEnabledTransitions(candidat) %}
-            <li>
-                <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}" class="btn btn-primary">
-                    {{ transition.getName() | capitalize }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
 {% endblock %}

@@ -8,6 +8,7 @@ use Symfony\Component\Workflow\Registry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Faker\Factory;
 
 class CandidatController extends AbstractController
 {
@@ -21,16 +22,37 @@ class CandidatController extends AbstractController
     #[Route('/candidature/add', name: 'candidat_add')]
     public function addCommande(EntityManagerInterface $em): Response
     {
+        $faker = Factory::create('fr_FR');
+
         $candidat = new Candidat();
-        $candidat->setNom('Doe');
-        $candidat->setPrenom('John');
-        $candidat->setEmail('john.doe@example.com');
+        $candidat->setNom($faker->lastName);
+        $candidat->setPrenom($faker->firstName);
+        $candidat->setEmail($faker->unique()->safeEmail);
 
         $em->persist($candidat);
         $em->flush();
 
         // Rediriger vers la timeline de la commande après création
         return $this->redirectToRoute('candidature_timeline', ['id' => $candidat->getId()]);
+    }
+
+    #[Route('/candidature/add-multiple/{count}', name: 'candidat_add_multiple')]
+    public function addMultipleCandidats(EntityManagerInterface $em, int $count = 5): Response
+    {
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < $count; $i++) {
+            $candidat = new Candidat();
+            $candidat->setNom($faker->lastName);
+            $candidat->setPrenom($faker->firstName);
+            $candidat->setEmail($faker->unique()->safeEmail);
+
+            $em->persist($candidat);
+        }
+
+        $em->flush();
+
+        return new Response("{$count} candidats ajoutés !");
     }
 
     #[Route('/candidature/{id}', name: 'candidature_timeline')]
