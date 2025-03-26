@@ -4,6 +4,9 @@
 
 {% block body %}
     <div class="container mt-4">
+
+        <a class="btn btn-primary mb-4" href="{{ path('candidatures') }}">Retour candidatures</a>
+
         <h1 class="mb-4">Suivi de la candidature #{{ candidat.id }}</h1>
         <h2 class="mb-4">
             {{ candidat.prenom }} {{ candidat.nom }}
@@ -39,7 +42,7 @@
                 {% endfor %}
             </div>
         </div>
-        
+
         <div class="timeline mt-4">
             <div class="d-flex justify-content-between">
                 {% for status, details in statusMapping %}
