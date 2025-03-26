@@ -9,9 +9,9 @@
         <h3 class="d-flex align-items-center">
             Statut actuel :
             <span class="badge 
-                {% if candidat.status == 'candidature_envoyee' %}badge-primary{% elseif candidat.status == 'entretien_planifie' %}badge-warning{% elseif candidat.status == 'entretien_realise' %}badge-info{% elseif candidat.status == 'offre_envoyee' %}badge-success{% elseif candidat.status == 'accepte' %}badge-success{% else %}badge-danger{% endif %}
+                {% if candidat.status == 'candidature_recue' %}badge-primary{% elseif candidat.status == 'entretien_planifie' %}badge-warning{% elseif candidat.status == 'entretien_realise' %}badge-info{% elseif candidat.status == 'offre_envoyee' %}badge-success{% elseif candidat.status == 'accepte' %}badge-success{% else %}badge-danger{% endif %}
                 rounded-pill px-3 py-2 ms-2"
-                style="background-color: {% if candidat.status == 'candidature_envoyee' %}#007bff{% elseif candidat.status == 'entretien_planifie' %}#ffc107{% elseif candidat.status == 'entretien_realise' %}#17a2b8{% elseif candidat.status == 'offre_envoyee' %}#28a745{% elseif candidat.status == 'accepte' %}#28a745{% else %}#dc3545{% endif %}; color: white;">
+                style="background-color: {% if candidat.status == 'candidature_recue' %}#007bff{% elseif candidat.status == 'entretien_planifie' %}#ffc107{% elseif candidat.status == 'entretien_realise' %}#17a2b8{% elseif candidat.status == 'test_technique' %}#17a2b8{% elseif candidat.status == 'validation_rh' %}#17a2b8{% elseif candidat.status == 'offre_envoyee' %}#28a745{% elseif candidat.status == 'accepte' %}#28a745{% else %}#f59f8d{% endif %}; color: white;">
                 {{ candidat.status | capitalize }}
             </span>
         </h3>
@@ -19,7 +19,7 @@
         <!-- Timeline des étapes -->
         <div class="timeline mt-4">
             <ul class="list-group">
-                <li class="list-group-item {% if candidat.status == 'candidature_envoyee' %}list-group-item-primary{% endif %}">
+                <li class="list-group-item {% if candidat.status == 'candidature_recue' %}list-group-item-primary{% endif %}">
                     Candidature envoyée
                 </li>
                 <li class="list-group-item {% if candidat.status == 'entretien_planifie' %}list-group-item-warning{% endif %}">
@@ -27,6 +27,12 @@
                 </li>
                 <li class="list-group-item {% if candidat.status == 'entretien_realise' %}list-group-item-info{% endif %}">
                     Entretien réalisé
+                </li>
+                <li class="list-group-item {% if candidat.status == 'test_technique' %}list-group-item-info{% endif %}">
+                    Test technique
+                </li>
+                <li class="list-group-item {% if candidat.status == 'validation_rh' %}list-group-item-info{% endif %}">
+                    Validation RH
                 </li>
                 <li class="list-group-item {% if candidat.status == 'offre_envoyee' %}list-group-item-success{% endif %}">
                     Offre envoyée
