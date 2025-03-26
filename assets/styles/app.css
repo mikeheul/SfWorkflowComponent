@@ -124,7 +124,6 @@ h2, h3 {
     background-color: #2ecc71;
 }
 
-/* Media Queries for responsiveness */
 @media (max-width: 768px) {
     .timeline-container {
         width: 100%;
@@ -184,7 +183,7 @@ h2, h3 {
 }
 
 .timeline-item.active .timeline-point {
-    border: 3px solid white; /* Border around the active point */
+    border: 3px solid white; 
 }
 
 .timeline .timeline-item:not(:last-child)::after {
@@ -198,6 +197,6 @@ h2, h3 {
 }
 
 .timeline .timeline-item.active::after {
-    background-color: #007bff; /* Active status line color */
+    background-color: #007bff;
 }
 
