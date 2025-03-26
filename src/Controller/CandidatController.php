@@ -18,7 +18,7 @@ class CandidatController extends AbstractController
         $this->workflowRegistry = $workflowRegistry;
     }
 
-    #[Route('/candidat/add', name: 'candidat_add')]
+    #[Route('/candidature/add', name: 'candidat_add')]
     public function addCommande(EntityManagerInterface $em): Response
     {
         $candidat = new Candidat();
