@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi de la Candidature{% endblock %}
+
+{% block body %}
+    <h1>Suivi de la candidature #{{ candidat.id }}</h1>
+
+    <h3>Statut actuel : {{ candidat.status }}</h3>
+
+    <!-- Timeline des étapes -->
+    <div class="timeline">
+        <ul>
+            <li {% if candidat.status == 'candidature_envoyee' %}class="active"{% endif %}>Candidature envoyée</li>
+            <li {% if candidat.status == 'entretien_planifie' %}class="active"{% endif %}>Entretien planifié</li>
+            <li {% if candidat.status == 'entretien_realise' %}class="active"{% endif %}>Entretien réalisé</li>
+            <li {% if candidat.status == 'offre_envoyee' %}class="active"{% endif %}>Offre envoyée</li>
+            <li {% if candidat.status == 'accepte' %}class="active"{% endif %}>Accepté</li>
+            <li {% if candidat.status == 'refuse' %}class="active"{% endif %}>Refusé</li>
+        </ul>
+    </div>
+
+    <!-- Boutons pour passer à l'étape suivante -->
+    <h3>Actions possibles :</h3>
+    <ul>
+        {% for transition in workflow.getEnabledTransitions(candidat) %}
+            <li>
+                <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}" class="btn btn-primary">
+                    {{ transition.getName() | capitalize }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

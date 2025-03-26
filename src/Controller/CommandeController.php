@@ -34,7 +34,7 @@ class CommandeController extends AbstractController
     #[Route('/commande/start/{id}', name: 'commande_start')]
     public function startCommande(Commande $commande, EntityManagerInterface $em): Response
     {
-        $workflow = $this->workflowRegistry->get($commande);
+        $workflow = $this->workflowRegistry->get($commande, 'commande_workflow');
 
         if ($workflow->can($commande, 'start')) {
             $workflow->apply($commande, 'start');
@@ -49,7 +49,7 @@ class CommandeController extends AbstractController
     #[Route('/commande/process/{id}', name: 'commande_process')]
     public function processCommande(Commande $commande, EntityManagerInterface $em): Response
     {
-        $workflow = $this->workflowRegistry->get($commande);
+        $workflow = $this->workflowRegistry->get($commande, 'commande_workflow');
 
         if ($workflow->can($commande, 'process')) {
             $workflow->apply($commande, 'process');
@@ -64,7 +64,7 @@ class CommandeController extends AbstractController
     #[Route('/commande/deliver/{id}', name: 'commande_deliver')]
     public function deliverCommande(Commande $commande, EntityManagerInterface $em): Response
     {
-        $workflow = $this->workflowRegistry->get($commande);
+        $workflow = $this->workflowRegistry->get($commande, 'commande_workflow');
 
         if ($workflow->can($commande, 'deliver')) {
             $workflow->apply($commande, 'deliver');
@@ -79,7 +79,7 @@ class CommandeController extends AbstractController
     #[Route('/commande/reset/{id}', name: 'commande_reset')]
     public function resetCommande(Commande $commande, EntityManagerInterface $em): Response
     {
-        $workflow = $this->workflowRegistry->get($commande);
+        $workflow = $this->workflowRegistry->get($commande, 'commande_workflow');
 
         if ($workflow->can($commande, 'reset')) {
             $workflow->apply($commande, 'reset');

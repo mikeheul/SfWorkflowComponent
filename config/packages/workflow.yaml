@@ -22,3 +22,39 @@ framework:
                 reset:
                     from: livree
                     to: en_attente
+
+        candidature_workflow:
+            type: 'state_machine'
+            supports:
+                - App\Entity\Candidat
+            places:
+                - 'candidature_recue'
+                - 'entretien_planifie'
+                - 'entretien_realise'
+                - 'test_technique'
+                - 'validation_rh'
+                - 'offre_envoyee'
+                - 'accepte'
+                - 'refuse'
+            transitions:
+                planifier_entretien:
+                    from: 'candidature_recue'
+                    to: 'entretien_planifie'
+                realiser_entretien:
+                    from: 'entretien_planifie'
+                    to: 'entretien_realise'
+                test:
+                    from: 'entretien_realise'
+                    to: 'test_technique'
+                validation:
+                    from: 'test_technique'
+                    to: 'validation_rh'
+                envoyer_offre:
+                    from: 'validation_rh'
+                    to: 'offre_envoyee'
+                accepter:
+                    from: 'offre_envoyee'
+                    to: 'accepte'
+                refuser:
+                    from: ['candidature_recue', 'entretien_planifie', 'entretien_realise', 'test_technique', 'validation_rh', 'offre_envoyee']
+                    to: 'refuse'
