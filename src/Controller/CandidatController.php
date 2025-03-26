@@ -7,6 +7,7 @@ use App\Entity\Candidat;
 use App\Repository\CandidatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\Registry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +22,16 @@ class CandidatController extends AbstractController
     }
 
     #[Route('/candidature', name: 'candidatures')]
-    public function candidatures(CandidatRepository $cr): Response
+    public function candidatures(Request $request, CandidatRepository $cr): Response
     {
-        $candidats = $cr->findBy([], ['dateCandidature' => 'DESC']);
-
+        $statusFilter = $request->query->get('status');
+        
+        if ($statusFilter) {
+            $candidats = $cr->findBy(['status' => $statusFilter]);
+        } else {
+            $candidats = $cr->findBy([], ['dateCandidature' => 'DESC']);
+        }
+        
         return $this->render('candidature/candidatures.html.twig', [
             'candidats' => $candidats,
         ]);

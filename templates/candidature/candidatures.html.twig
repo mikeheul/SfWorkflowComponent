@@ -6,6 +6,22 @@
     <div class="container mt-4">
         <h1 class="mb-4">Liste des Candidats</h1>
 
+        <!-- Filtre pour les candidatures -->
+        <form method="get" class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
+                        <option value="" {% if app.request.get('status') == '' %}selected{% endif %}>Toutes les candidatures</option>
+                        <option value="accepte" {% if app.request.get('status') == 'accepte' %}selected{% endif %}>Candidatures acceptées</option>
+                        <option value="refuse" {% if app.request.get('status') == 'refuse' %}selected{% endif %}>Candidatures refusées</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                </div>
+            </div>
+        </form>
+
         <!-- Conteneur pour les cartes -->
         <div class="row">
             {% for candidat in candidats %}
