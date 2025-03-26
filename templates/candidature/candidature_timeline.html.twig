@@ -28,17 +28,6 @@
             </span>
         </h3>
 
-        <!-- Timeline des étapes -->
-        <div class="timeline mt-4">
-            <ul class="list-group">
-                {% for status, details in statusMapping %}
-                    <li class="list-group-item {% if candidat.status == status %}{{ details.listClass }}{% endif %}">
-                        {{ status | capitalize }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
         <!-- Actions possibles -->
         <div class="mt-4">
             <h3>Actions possibles :</h3>
@@ -50,5 +39,33 @@
                 {% endfor %}
             </div>
         </div>
+        
+        <div class="timeline mt-4">
+            <div class="d-flex justify-content-between">
+                {% for status, details in statusMapping %}
+                    <div class="timeline-item text-center">
+                        <div class="timeline-point {% if candidat.status == status %}active{% endif %}" 
+                            style="background-color: {% if candidat.status == status %}{{ details.bgColor }}{% else %}#ddd{% endif %};"></div>
+                        <div class="timeline-label mt-2">
+                            <span class="badge {{ details.badgeClass }}">
+                                {{ status | capitalize }}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Timeline des étapes -->
+        <div class="timeline mt-4">
+            <ul class="list-group">
+                {% for status, details in statusMapping %}
+                    <li class="list-group-item {% if candidat.status == status %}{{ details.listClass }}{% endif %}">
+                        {{ status | capitalize }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 {% endblock %}

@@ -153,3 +153,51 @@ h2, h3 {
         width: 100%;
     }
 }
+
+
+.timeline {
+    padding: 20px 0;
+}
+
+.timeline-item {
+    position: relative;
+    width: 15%;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+}
+
+.timeline-point {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    transition: background-color 0.3s ease;
+}
+
+.timeline-label {
+    margin-top: 8px;
+}
+
+.badge {
+    color: #000;
+}
+
+.timeline-item.active .timeline-point {
+    border: 3px solid white; /* Border around the active point */
+}
+
+.timeline .timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 100%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+}
+
+.timeline .timeline-item.active::after {
+    background-color: #007bff; /* Active status line color */
+}
+

@@ -78,11 +78,47 @@ class CandidatController extends AbstractController
     {
         $workflow = $this->workflowRegistry->get($candidat, 'candidature_workflow');
 
+        // Mapping des statuts avec couleurs et classes appropriées
+        $statusMapping = [
+            'candidature_recue' => [
+                'badgeClass' => 'badge-primary',
+                'bgColor' => '#007bff', // Couleur du fond
+                'listClass' => 'list-group-item-primary'
+            ],
+            'entretien_planifie' => [
+                'badgeClass' => 'badge-warning',
+                'bgColor' => '#ffc107',
+                'listClass' => 'list-group-item-warning'
+            ],
+            'entretien_realise' => [
+                'badgeClass' => 'badge-info',
+                'bgColor' => '#17a2b8',
+                'listClass' => 'list-group-item-info'
+            ],
+            'offre_envoyee' => [
+                'badgeClass' => 'badge-success',
+                'bgColor' => '#28a745',
+                'listClass' => 'list-group-item-success'
+            ],
+            'accepte' => [
+                'badgeClass' => 'badge-success',
+                'bgColor' => '#28a745',
+                'listClass' => 'list-group-item-success'
+            ],
+            'refuse' => [
+                'badgeClass' => 'badge-danger',
+                'bgColor' => '#f59f8d',
+                'listClass' => 'list-group-item-danger'
+            ]
+        ];
+
         return $this->render('candidature/candidature_timeline.html.twig', [
             'candidat' => $candidat,
             'workflow' => $workflow,
+            'statusMapping' => $statusMapping
         ]);
     }
+
 
     #[Route('/candidature/progress/{id}/{transition}', name: 'candidature_progress')]
     public function progressCandidature(Candidat $candidat, string $transition, EntityManagerInterface $em): Response
