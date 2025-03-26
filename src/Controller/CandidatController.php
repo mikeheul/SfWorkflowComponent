@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use Faker\Factory;
 use App\Entity\Candidat;
+use App\Repository\CandidatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Faker\Factory;
 
 class CandidatController extends AbstractController
 {
@@ -19,8 +20,18 @@ class CandidatController extends AbstractController
         $this->workflowRegistry = $workflowRegistry;
     }
 
+    #[Route('/candidature', name: 'candidatures')]
+    public function candidatures(CandidatRepository $cr): Response
+    {
+        $candidats = $cr->findBy([], ['dateCandidature' => 'DESC']);
+
+        return $this->render('candidature/candidatures.html.twig', [
+            'candidats' => $candidats,
+        ]);
+    }
+
     #[Route('/candidature/add', name: 'candidat_add')]
-    public function addCommande(EntityManagerInterface $em): Response
+    public function addCandidature(EntityManagerInterface $em): Response
     {
         $faker = Factory::create('fr_FR');
 

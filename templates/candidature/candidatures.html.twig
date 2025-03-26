@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Candidats{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Liste des Candidats</h1>
+
+        <!-- Table des candidats -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidat in candidats %}
+                    <tr>
+                        <td>{{ candidat.id }}</td>
+                        <td>{{ candidat.dateCandidature | date('d-m-Y') }}</td>
+                        <td>{{ candidat.nom }}</td>
+                        <td>{{ candidat.prenom }}</td>
+                        <td>{{ candidat.email }}</td>
+                        <td>
+                            <span class="badge rounded-pill px-3 py-2 ms-2"
+                                    style="background-color: {% if candidat.status == 'candidature_recue' %}#007bff{% elseif candidat.status == 'entretien_planifie' %}#ffc107{% elseif candidat.status == 'entretien_realise' %}#17a2b8{% elseif candidat.status == 'offre_envoyee' %}#28a745{% elseif candidat.status == 'accepte' %}#28a745{% else %}#f59f8d{% endif %}; color: white;">
+                                {{ candidat.status | capitalize }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ path('candidature_timeline', {'id': candidat.id}) }}" class="btn btn-info btn-sm">Voir Détails</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucun candidat trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

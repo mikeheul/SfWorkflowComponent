@@ -5,6 +5,9 @@
 {% block body %}
     <div class="container mt-4">
         <h1 class="mb-4">Suivi de la candidature #{{ candidat.id }}</h1>
+        <h2 class="mb-4">
+            {{ candidat.prenom }} {{ candidat.nom }}
+        </h2>
 
         {% set statusMapping = {
             'candidature_recue': {'badgeClass': 'badge-primary', 'bgColor': '#007bff', 'listClass': 'list-group-item-primary'},
