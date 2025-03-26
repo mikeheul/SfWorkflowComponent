@@ -35,7 +35,15 @@
                             </p>
                             <p>
                                 <span class="badge rounded-pill px-3 py-2"
-                                        style="background-color: {% if candidat.status == 'candidature_recue' %}#007bff{% elseif candidat.status == 'entretien_planifie' %}#ffc107{% elseif candidat.status == 'entretien_realise' %}#17a2b8{% elseif candidat.status == 'offre_envoyee' %}#28a745{% elseif candidat.status == 'accepte' %}#28a745{% else %}#f59f8d{% endif %}; color: white;">
+                                        style="background-color: {% if candidat.status == 'candidature_recue' %}#007bff
+                                                                    {% elseif candidat.status == 'entretien_planifie' %}#ffc107
+                                                                    {% elseif candidat.status == 'entretien_realise' %}#17a2b8
+                                                                    {% elseif candidat.status == 'test_technique' %}#17a2b8
+                                                                    {% elseif candidat.status == 'validation_rh' %}#17a2b8
+                                                                    {% elseif candidat.status == 'offre_envoyee' %}#28a745
+                                                                    {% elseif candidat.status == 'accepte' %}#28a745
+                                                                    {% else %}#f59f8d
+                                                                {% endif %}; color: white;">
                                     {{ candidat.status | capitalize }}
                                 </span>
                             </p>
