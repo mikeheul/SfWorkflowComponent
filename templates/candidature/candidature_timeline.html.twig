@@ -37,7 +37,7 @@
             <div class="list-group">
                 {% for transition in workflow.getEnabledTransitions(candidat) %}
                     <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}" class="list-group-item list-group-item-action btn btn-outline-primary mb-2">
-                        {{ transition.getName() | capitalize }}
+                        {{ transition.getName() | capitalize | replace({"_":" "}) }}
                     </a>
                 {% endfor %}
             </div>
