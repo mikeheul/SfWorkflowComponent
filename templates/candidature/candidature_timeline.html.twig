@@ -58,9 +58,29 @@
             <h3>Actions possibles :</h3>
             <div class="list-group">
                 {% for transition in workflow.getEnabledTransitions(candidat) %}
-                    <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}" class="list-group-item list-group-item-action btn btn-outline-primary mb-2">
-                        {{ transition.getName() | capitalize | replace({"_":" "}) }}
-                    </a>
+                    {% set canProgress = true %}
+        
+                    {% if candidat.status == 'entretien_planifie' and not candidat.dateEntretien %}
+                        {% set canProgress = false %}
+                    {% elseif candidat.status == 'test_technique' and not candidat.dateTest %}
+                        {% set canProgress = false %}
+                    {% elseif candidat.status == 'validation_rh' and not candidat.remarqueRH %}
+                        {% set canProgress = false %}
+                    {% elseif candidat.status == 'offre_envoyee' and not candidat.salairePropose %}
+                        {% set canProgress = false %}
+                    {% endif %}
+        
+                    {% if canProgress %}
+                        <a href="{{ path('candidature_progress', {'id': candidat.id, 'transition': transition.getName()}) }}"
+                            class="list-group-item list-group-item-action btn btn-outline-primary mb-2">
+                            {{ transition.getName() | capitalize | replace({"_":" "}) }}
+                        </a>
+                    {% else %}
+                        <button class="list-group-item list-group-item-action btn btn-outline-secondary mb-2 disabled"
+                                title="Remplissez les informations requises avant de continuer">
+                            {{ transition.getName() | capitalize | replace({"_":" "}) }}
+                        </button>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
